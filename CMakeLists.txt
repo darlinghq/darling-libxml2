@@ -119,6 +119,6 @@ set(xml2_SRCS
 )
 
 add_library(xml2 SHARED ${xml2_SRCS})
-target_link_libraries(xml2 system)
+target_link_libraries(xml2 system icucore)
 
 install(TARGETS xml2 DESTINATION lib${SUFFIX}/darling)
