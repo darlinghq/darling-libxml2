@@ -11,6 +11,10 @@
  * daniel@veillard.com
  */
 
+#ifdef DARLING
+__asm__(".symver h_errno, h_errno@DARWIN");
+#endif
+
 #define NEED_SOCKETS
 #define IN_LIBXML
 #include "libxml.h"
