@@ -122,3 +122,6 @@ add_library(xml2 SHARED ${xml2_SRCS})
 target_link_libraries(xml2 system icucore)
 
 install(TARGETS xml2 DESTINATION ${CMAKE_INSTALL_LIBDIR}/darling)
+
+install(FILES xml2-config.1 DESTINATION libexec/darling/usr/share/man/man1)
+install(FILES libxml.3 DESTINATION libexec/darling/usr/share/man/man3)
