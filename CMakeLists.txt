@@ -118,6 +118,7 @@ set(DYLIB_INSTALL_NAME "/usr/lib/libxml2.2.dylib")
 add_darling_library(xml2 SHARED ${xml2_SRCS})
 target_link_libraries(xml2 system icucore)
 set_target_properties(xml2 PROPERTIES OUTPUT_NAME "xml2.2")
+make_fat(xml2)
 
 install(TARGETS xml2 DESTINATION libexec/darling/usr/lib)
 InstallSymlink("libxml2.2.dylib" "${CMAKE_INSTALL_PREFIX}/libexec/darling/usr/lib/libxml2.dylib")
