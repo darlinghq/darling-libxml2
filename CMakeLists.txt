@@ -15,11 +15,7 @@ add_definitions(-D__APPLE__ -D__DYNAMIC__)
 add_definitions(-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=1080)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdinc -D__DARWIN_UNIX03 -fPIC -w -include ${CMAKE_CURRENT_SOURCE_DIR}/config.h")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -nostdlib -Wl,--version-script=${DARLING_TOP_DIRECTORY}/darwin.map")
-
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/darling")
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE) 
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -nostdlib")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -89,7 +85,7 @@ set(xml2_SRCS
 	parserInternals.c
 	pattern.c
 	relaxng.c
-	rngparser.c
+	#rngparser.c
 	SAX2.c
 	SAX.c
 	schematron.c
@@ -118,7 +114,14 @@ set(xml2_SRCS
 	xzlib.c
 )
 
-add_library(xml2 SHARED ${xml2_SRCS})
+set(DYLIB_INSTALL_NAME "/usr/lib/libxml2.2.dylib")
+add_darling_library(xml2 SHARED ${xml2_SRCS})
 target_link_libraries(xml2 system icucore)
+set_target_properties(xml2 PROPERTIES OUTPUT_NAME "xml2.2")
+make_fat(xml2)
 
-install(TARGETS xml2 DESTINATION ${CMAKE_INSTALL_LIBDIR}/darling)
+install(TARGETS xml2 DESTINATION libexec/darling/usr/lib)
+InstallSymlink("libxml2.2.dylib" "${CMAKE_INSTALL_PREFIX}/libexec/darling/usr/lib/libxml2.dylib")
+
+install(FILES xml2-config.1 DESTINATION libexec/darling/usr/share/man/man1)
+install(FILES libxml.3 DESTINATION libexec/darling/usr/share/man/man3)
