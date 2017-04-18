@@ -115,6 +115,8 @@ set(xml2_SRCS
 )
 
 set(DYLIB_INSTALL_NAME "/usr/lib/libxml2.2.dylib")
+set(DYLIB_COMPAT_VERSION "10.0.0")
+set(DYLIB_CURRENT_VERSION "10.9.0")
 add_darling_library(xml2 SHARED ${xml2_SRCS})
 target_link_libraries(xml2 system icucore)
 set_target_properties(xml2 PROPERTIES OUTPUT_NAME "xml2.2")
