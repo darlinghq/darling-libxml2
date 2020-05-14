@@ -59,6 +59,14 @@ set(WITH_ZLIB 1)
 
 configure_file(include/libxml/xmlversion.h.in include/libxml/xmlversion.h)
 
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/${DARLING_SDK_RELATIVE_PATH}/usr/include/libxml2/libxml")
+file(RELATIVE_PATH XMLVERSION_SDK_REL_PATH "${CMAKE_BINARY_DIR}/${DARLING_SDK_RELATIVE_PATH}/usr/include/libxml2/libxml" "${CMAKE_CURRENT_BINARY_DIR}/include/libxml/xmlversion.h")
+file(CREATE_LINK
+	"${XMLVERSION_SDK_REL_PATH}"
+	"${CMAKE_BINARY_DIR}/${DARLING_SDK_RELATIVE_PATH}/usr/include/libxml2/libxml/xmlversion.h"
+	SYMBOLIC
+)
+
 set(xml2_SRCS
 	buf.c
 	c14n.c
