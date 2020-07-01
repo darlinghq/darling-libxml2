@@ -8,126 +8,79 @@ if(COMMAND cmake_policy)
 	cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-add_definitions(-DHAVE_STDINT_H=1)
+add_definitions(
+	-DHAVE_CONFIG_H
+	-D_REENTRANT
+)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdinc -D__DARWIN_UNIX03 -fPIC -w -include ${CMAKE_CURRENT_SOURCE_DIR}/config.h")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdinc -D__DARWIN_UNIX03 -fPIC -w")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -nostdlib")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../icu/icuSources/common)
-
-set(LIBXML_VERSION_NUMBER "2.9.0")
-set(LIBXML_VERSION_NUMBER 20900)
-set(LIBXML_VERSION_EXTRA "-darling")
-set(WITH_TRIO 0)
-set(WITH_THREAD_ALLOC 0)
-set(WITH_MEM_DEBUG 0)
-set(WITH_RUN_DEBUG 0)
-set(WITH_LZMA 0)
-set(WITH_THREADS 1)
-set(WITH_TREE 1)
-set(WITH_OUTPUT 1)
-set(WITH_PUSH 1)
-set(WITH_READER 1)
-set(WITH_PATTERN 1)
-set(WITH_WRITER 1)
-set(WITH_SAX1 1)
-set(WITH_FTP 1)
-set(WITH_HTTP 1)
-set(WITH_VALID 1)
-set(WITH_HTML 1)
-set(WITH_LEGACY 1)
-set(WITH_C14N 1)
-set(WITH_CATALOG 1)
-set(WITH_DOCB 1)
-set(WITH_XPATH 1)
-set(WITH_XPTR 1)
-set(WITH_XINCLUDE 1)
-set(WITH_ICONV 0)
-set(WITH_ICU 1)
-set(WITH_ISO8859X 1)
-set(WITH_DEBUG 1)
-set(WITH_REGEXPS 1)
-set(WITH_EXPR 1)
-set(WITH_SCHEMAS 1)
-set(WITH_SCHEMATRON 1)
-set(WITH_MODULES 1)
-set(WITH_ZLIB 1)
-
-configure_file(include/libxml/xmlversion.h.in include/libxml/xmlversion.h)
-
-file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/${DARLING_SDK_RELATIVE_PATH}/usr/include/libxml2/libxml")
-file(RELATIVE_PATH XMLVERSION_SDK_REL_PATH "${CMAKE_BINARY_DIR}/${DARLING_SDK_RELATIVE_PATH}/usr/include/libxml2/libxml" "${CMAKE_CURRENT_BINARY_DIR}/include/libxml/xmlversion.h")
-file(CREATE_LINK
-	"${XMLVERSION_SDK_REL_PATH}"
-	"${CMAKE_BINARY_DIR}/${DARLING_SDK_RELATIVE_PATH}/usr/include/libxml2/libxml/xmlversion.h"
-	SYMBOLIC
+include_directories(
+	${CMAKE_CURRENT_SOURCE_DIR}/libxml2/include
+	${CMAKE_CURRENT_SOURCE_DIR}/libxml2
+	"${CMAKE_CURRENT_SOURCE_DIR}/Pregenerated Files/include"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Pregenerated Files"
 )
 
 set(xml2_SRCS
-	buf.c
-	c14n.c
-	catalog.c
-	chvalid.c
-	debugXML.c
-	dict.c
-	DOCBparser.c
-	encoding.c
-	entities.c
-	error.c
-	globals.c
-	hash.c
-	HTMLparser.c
-	HTMLtree.c
-	legacy.c
-	list.c
-	nanoftp.c
-	nanohttp.c
-	parser.c
-	parserInternals.c
-	pattern.c
-	relaxng.c
-	#rngparser.c
-	SAX2.c
-	SAX.c
-	schematron.c
-	threads.c
-	tree.c
-	trio.c
-	trionan.c
-	triostr.c
-	uri.c
-	valid.c
-	xinclude.c
-	xlink.c
-	xmlIO.c
-	xmlmemory.c
-	xmlmodule.c
-	xmlreader.c
-	xmlregexp.c
-	xmlsave.c
-	xmlschemas.c
-	xmlschemastypes.c
-	xmlstring.c
-	xmlunicode.c
-	xmlwriter.c
-	xpath.c
-	xpointer.c
-	xzlib.c
+	libxml2/buf.c
+	libxml2/c14n.c
+	libxml2/catalog.c
+	libxml2/chvalid.c
+	libxml2/debugXML.c
+	libxml2/dict.c
+	libxml2/DOCBparser.c
+	libxml2/encoding.c
+	libxml2/entities.c
+	libxml2/error.c
+	libxml2/globals.c
+	libxml2/hash.c
+	libxml2/HTMLparser.c
+	libxml2/HTMLtree.c
+	libxml2/legacy.c
+	libxml2/list.c
+	libxml2/nanoftp.c
+	libxml2/nanohttp.c
+	libxml2/parser.c
+	libxml2/parserInternals.c
+	libxml2/pattern.c
+	libxml2/relaxng.c
+	libxml2/SAX.c
+	libxml2/SAX2.c
+	libxml2/schematron.c
+	libxml2/threads.c
+	libxml2/tree.c
+	libxml2/uri.c
+	libxml2/valid.c
+	libxml2/xinclude.c
+	libxml2/xlink.c
+	libxml2/xmlIO.c
+	libxml2/xmlmemory.c
+	libxml2/xmlmodule.c
+	libxml2/xmlreader.c
+	libxml2/xmlregexp.c
+	libxml2/xmlsave.c
+	libxml2/xmlschemas.c
+	libxml2/xmlschemastypes.c
+	libxml2/xmlstring.c
+	libxml2/xmlunicode.c
+	libxml2/xmlwriter.c
+	libxml2/xpath.c
+	libxml2/xpointer.c
+	libxml2/xzlib.c
 )
 
 set(DYLIB_INSTALL_NAME "/usr/lib/libxml2.2.dylib")
 set(DYLIB_COMPAT_VERSION "10.0.0")
 set(DYLIB_CURRENT_VERSION "10.9.0")
 add_darling_library(xml2 SHARED ${xml2_SRCS})
-target_link_libraries(xml2 system icucore)
+target_link_libraries(xml2 system icucore z)
 set_target_properties(xml2 PROPERTIES OUTPUT_NAME "xml2.2")
 make_fat(xml2)
 
 install(TARGETS xml2 DESTINATION libexec/darling/usr/lib)
 InstallSymlink("libxml2.2.dylib" "${CMAKE_INSTALL_PREFIX}/libexec/darling/usr/lib/libxml2.dylib")
 
-install(FILES xml2-config.1 DESTINATION libexec/darling/usr/share/man/man1)
-install(FILES libxml.3 DESTINATION libexec/darling/usr/share/man/man3)
+install(FILES libxml2/xml2-config.1 DESTINATION libexec/darling/usr/share/man/man1)
+install(FILES libxml2/libxml.3 DESTINATION libexec/darling/usr/share/man/man3)
